@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
@@ -6,7 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from bangazon_api.models import PaymentType
 from bangazon_api.serializers import (
-    PaymentTypeSerializer, MessageSerializer, CreatePaymentType)
+    PaymentTypeSerializer, MessageSerializer, CreatePaymentType, UserSerializer)
 
 
 class PaymentTypeView(ViewSet):
@@ -18,9 +19,21 @@ class PaymentTypeView(ViewSet):
     })
     def list(self, request):
         """Get a list of payment types for the current user"""
+
         payment_types = PaymentType.objects.all()
+        user = request.auth.user
+        payment_types = payment_types.filter(customer=user)
+                  
         serializer = PaymentTypeSerializer(payment_types, many=True)
         return Response(serializer.data)
+
+
+        
+        
+        # payment_types = PaymentType.objects.filter(payment_types.customer_id==User.id)
+        # serializer = PaymentTypeSerializer(payment_types, many=True)
+        # return Response(serializer.data)
+    
 
     @swagger_auto_schema(
         request_body=CreatePaymentType,
