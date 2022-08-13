@@ -30,9 +30,13 @@ class ProductView(ViewSet):
     )
     def create(self, request):
         """Create a new product for the current user's store"""
+        
         store = Store.objects.get(seller=request.auth.user)
         category = Category.objects.get(pk=request.data['categoryId'])
         try:
+            
+            print("********" * 100)
+            print(request.data)
             product = Product.objects.create(
                 name=request.data['name'],
                 store=store,
@@ -44,6 +48,8 @@ class ProductView(ViewSet):
             )
             serializer = ProductSerializer(product)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # except Store.DoesNotExist:
+        #     store=None
         except ValidationError as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_400_BAD_REQUEST)
 
