@@ -34,9 +34,6 @@ class ProductView(ViewSet):
         store = Store.objects.get(seller=request.auth.user)
         category = Category.objects.get(pk=request.data['categoryId'])
         try:
-            
-            print("********" * 100)
-            print(request.data)
             product = Product.objects.create(
                 name=request.data['name'],
                 store=store,
