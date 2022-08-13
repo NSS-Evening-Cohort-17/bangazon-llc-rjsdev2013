@@ -26,14 +26,7 @@ class PaymentTypeView(ViewSet):
                   
         serializer = PaymentTypeSerializer(payment_types, many=True)
         return Response(serializer.data)
-
-
-        
-        
-        # payment_types = PaymentType.objects.filter(payment_types.customer_id==User.id)
-        # serializer = PaymentTypeSerializer(payment_types, many=True)
-        # return Response(serializer.data)
-    
+   
 
     @swagger_auto_schema(
         request_body=CreatePaymentType,
